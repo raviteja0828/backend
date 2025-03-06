@@ -1,3 +1,7 @@
+import os
+import boto3
+import tensorflow as tf
+from botocore.exceptions import NoCredentialsError
 from flask import Flask, request, jsonify
 import requests
 import pymongo
@@ -5,6 +9,7 @@ import re
 from flask_cors import CORS
 import jwt  # For JWT token handling
 from functools import wraps
+
 from datetime import datetime
 import tensorflow as tf
 import pandas as pd
@@ -14,6 +19,56 @@ from PIL import Image
 import io
 import joblib
 import base64
+import os
+
+
+# S3 configuration
+s3_client = boto3.client('s3',
+                         aws_access_key_id='AKIA4IM3HSVQU6BF4RPY',  # Replace with your access key
+                         aws_secret_access_key='fR+rZdFw87w31HZEDW0H7LnCp0pG0lGBBApa9c/W',  # Replace with your secret key
+                         region_name='eu-north-1')  # Replace with your region, e.g., 'us-east-1'
+
+BUCKET_NAME = 'ashu2807'  # Replace with your S3 bucket name
+
+# Folder where you want to download the file locally
+DOWNLOAD_FOLDER = 'ml_model/'
+
+# Ensure the download folder exists
+os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
+
+def download_file_from_s3(file_key, destination):
+    try:
+        # Check if the file already exists
+        if not os.path.exists(destination):
+            # Download the file from S3 if it doesn't exist
+            s3_client.download_file(BUCKET_NAME, file_key, destination)
+            print(f"File '{file_key}' downloaded successfully to {destination}")
+        else:
+            print(f"File '{file_key}' already exists at {destination}. Skipping download.")
+    except NoCredentialsError:
+        print("Credentials not available.")
+    except Exception as e:
+        print(f"Error: {e}")
+
+# Correct S3 keys (since the files are in the root of the bucket)
+file_key_model = "model.h5"  # Correct key for the model file
+file_key_portion = "portion_independent.h5"  # Correct key for the portion file
+
+# Define the local paths where the files will be saved
+model_file_path = os.path.join(DOWNLOAD_FOLDER, "model.h5")
+portion_file_path = os.path.join(DOWNLOAD_FOLDER, "portion_independent.h5")
+
+# Download the files only if they don't exist locally
+download_file_from_s3(file_key_model, model_file_path)
+download_file_from_s3(file_key_portion, portion_file_path)
+
+# Now load the models after they've been downloaded
+if os.path.exists(portion_file_path) and os.path.exists(model_file_path):
+    portion_independent = tf.keras.models.load_model(portion_file_path)
+    image_model = tf.keras.models.load_model(model_file_path)
+    print("Models loaded successfully.")
+else:
+    print(f"Error: One or both files are missing at: {portion_file_path} or {model_file_path}")
 
 
 app = Flask(__name__)
@@ -34,8 +89,12 @@ USDA_API_KEY = "ZFUU0bgFxh8cavVLZx7a1CKo5eTD15lvlpXxAaNV"
 SEARCH_URL = f"https://api.nal.usda.gov/fdc/v1/foods/search?api_key={USDA_API_KEY}"
 DETAIL_URL = f"https://api.nal.usda.gov/fdc/v1/food/{{}}?api_key={USDA_API_KEY}"
 
-portion_independent = tf.keras.models.load_model('ml_models/portion_independent.h5')
-image_model = tf.keras.models.load_model('ml_models/model.h5')
+
+
+
+
+
+
 
 classes = pd.read_json('ml_models/class_encoding.json')
 class_map = dict(zip(classes['idx'], classes['ingr']))
@@ -344,4 +403,4 @@ def predict():
 
   # Ensure this port matches your frontend calls
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=5001,debug=False)
