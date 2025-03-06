@@ -11,3 +11,4 @@ Pillow
 joblib
 boto3
 datetime
+python-dotenv
