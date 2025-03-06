@@ -22,11 +22,10 @@ import base64
 import os
 
 
-# S3 configuration
 s3_client = boto3.client('s3',
-                         aws_access_key_id='AKIA4IM3HSVQQHTWRJXI',  # Replace with your access key
-                         aws_secret_access_key='qQU2NB5jfcKxzDhqEure9Gv38Be8ytBhz7iA3exl',  # Replace with your secret key
-                         region_name='eu-north-1')  # Replace with your region, e.g., 'us-east-1'
+                         aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+                         aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'),
+                         region_name=os.getenv('AWS_DEFAULT_REGION'))  # Replace with your region, e.g., 'us-east-1'
 
 BUCKET_NAME = 'ashu2807'  # Replace with your S3 bucket name
 
