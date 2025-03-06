@@ -24,8 +24,8 @@ import os
 
 # S3 configuration
 s3_client = boto3.client('s3',
-                         aws_access_key_id='AKIA4IM3HSVQU6BF4RPY',  # Replace with your access key
-                         aws_secret_access_key='fR+rZdFw87w31HZEDW0H7LnCp0pG0lGBBApa9c/W',  # Replace with your secret key
+                         aws_access_key_id='AKIA4IM3HSVQQHTWRJXI',  # Replace with your access key
+                         aws_secret_access_key='qQU2NB5jfcKxzDhqEure9Gv38Be8ytBhz7iA3exl',  # Replace with your secret key
                          region_name='eu-north-1')  # Replace with your region, e.g., 'us-east-1'
 
 BUCKET_NAME = 'ashu2807'  # Replace with your S3 bucket name
