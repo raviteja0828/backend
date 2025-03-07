@@ -19,7 +19,10 @@ import base64
 app = Flask(__name__)
 
 # Enable CORS to allow requests from React (running on port 3000)
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+
+
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 
 # MongoDB connection
 client = pymongo.MongoClient("mongodb+srv://merakanapalliraviteja86:wejhTlHwGGgPMXbn@cluster0.q7okber.mongodb.net/ashu?retryWrites=true&w=majority")
