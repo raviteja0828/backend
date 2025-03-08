@@ -2,8 +2,8 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
-const User = require("./models/user.js");
-const OTP = require("./models/otp.js"); // Import the OTP model
+const User = require("./models/user");
+const OTP = require("./models/otp"); // Import the OTP model
 const rateLimit = require("express-rate-limit"); // For rate limiting
 require("dotenv").config(); // Ensure .env variables are loaded
 
