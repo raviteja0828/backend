@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin:'*',// Allow React app origin
+  origin: 'http://localhost:3000', // Allow React app origin
   credentials: true // Allow cookies to be sent
 }));
 app.use(bodyParser.json());
@@ -149,8 +149,8 @@ app.post('/api/weather', async (req, res) => {
 
 
 // Import Routes for authentication and user data
-const authRoutes = require("routes/authRoutes.js");
-const userRoutes = require("routes/userRoutes.js");
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
