@@ -11,7 +11,6 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware
-const cors = require('cors');
 
 app.use(cors({
     origin: ['http://localhost:3000', 'https://localhost'], // Allow both web and Capacitor apps
