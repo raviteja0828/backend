@@ -221,4 +221,4 @@ def get_total_breakfast_calories():
         return jsonify({"error": "Could not retrieve breakfast data."}), 500
     
 if __name__ == '__main__':
-    app.run(debug=False, port=5001)  # Ensure this port matches your frontend calls
+    app.run(host='0.0.0.0',debug=False, port=5001)  # Ensure this port matches your frontend calls
