@@ -3,12 +3,5 @@ requests
 pymongo
 flask-cors
 pyjwt
-tensorflow
-pandas
-numpy
-opencv-python
-Pillow
-joblib
-boto3
 datetime
 python-dotenv
