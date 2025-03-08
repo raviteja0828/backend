@@ -149,8 +149,8 @@ app.post('/api/weather', async (req, res) => {
 
 
 // Import Routes for authentication and user data
-const authRoutes = require("./routes/authRoutes");
-const userRoutes = require("./routes/userRoutes");
+const authRoutes = require("routes/authRoutes");
+const userRoutes = require("routes/userRoutes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
