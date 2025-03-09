@@ -168,9 +168,12 @@ def get_user_calories():
     # If no data for today, return 0 calories
     return jsonify({'totalCalories': 0})
 
-# Get today's date
 def get_today_date():
-    return datetime.utcnow().strftime('%Y-%m-%d')  # Use UTC time instead of local time
+    # Get the current time in UTC
+    now_utc = datetime.utcnow().replace(tzinfo=pytz.utc)
+    
+    # Return only the date part as 'YYYY-MM-DD'
+    return now_utc.strftime('%Y-%m-%d')
 
 
 # API endpoint to get the total breakfast calories for today
