@@ -170,7 +170,8 @@ def get_user_calories():
 
 # Get today's date
 def get_today_date():
-    return datetime.now().strftime('%Y-%m-%d')  # Format as 'YYYY-MM-DD'
+    return datetime.utcnow().strftime('%Y-%m-%d')  # Use UTC time instead of local time
+
 
 # API endpoint to get the total breakfast calories for today
 @app.route('/total-breakfast-calories', methods=['GET'])
