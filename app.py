@@ -170,7 +170,10 @@ def get_user_calories():
     return jsonify({'totalCalories': 0})
 
 def get_today_date():
-    return datetime.utcnow().strftime('%Y-%m-%d')  # Use UTC time instead of local time
+    # Use local timezone to ensure the correct date
+    local_timezone = pytz.timezone("Asia/Kolkata")  # Replace with your local timezone if different
+    today = datetime.now(local_timezone)
+    return today.strftime('%Y-%m-%d') 
 
 
 # API endpoint to get the total breakfast calories for today
