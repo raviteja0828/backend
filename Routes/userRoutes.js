@@ -211,7 +211,55 @@ router.get("/sleep", authenticate, async (req, res) => {
   }
 });
 
+router.post("/update-health-data", authenticate, async (req, res) => {
+  try {
+    const { height, weight, age, activity, targetWeight } = req.body;
 
+    if (!height || !weight || !age || !activity || !targetWeight) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    // Calculate BMI
+    const bmi = (weight / ((height / 100) ** 2)).toFixed(1);
+
+    // Calculate Calorie Intake
+    const calorieIntake = (weight * (activity === "Sedentary" ? 24 : activity === "Moderate" ? 30 : 35)).toFixed(0);
+
+    // Calculate Macros
+    const macros = {
+      protein: Math.round((calorieIntake * 0.3) / 4),
+      carbs: Math.round((calorieIntake * 0.4) / 4),
+      fats: Math.round((calorieIntake * 0.3) / 9),
+      magnesium: 0.4, // Placeholder value for magnesium
+      sodium: 1, // Placeholder value for sodium
+    };
+
+    // Calculate Estimated Time to Target Weight (based on 0.45kg weight loss per week)
+    const estimatedTimeToTargetWeight = `${(Math.abs(weight - targetWeight) / 0.45).toFixed(1)} weeks`;
+
+    // Update the user's data in the database
+    const user = await User.findByIdAndUpdate(req.user.userId, {
+      height,
+      weight,
+      age,
+      activity,
+      targetWeight,
+      bmi,
+      calorieIntake,
+      macros,
+      estimatedTimeToTargetWeight,
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({ message: "Health data updated successfully!" });
+  } catch (error) {
+    console.error("🚨 Error updating health data:", error);
+    res.status(500).json({ error: "Server error while updating data" });
+  }
+});
 
 
 
