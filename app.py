@@ -113,7 +113,7 @@ def get_product(code):
 def save():
     data = request.json
     user_id = request.user_id  # Get the user ID from the authenticated request
-     today = get_today_date()
+    today = get_today_date()
     
     if data:
         # Save food data into the unified collection: user_food_data
