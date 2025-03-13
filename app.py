@@ -182,7 +182,6 @@ def get_today_date():
 @authenticate
 def get_total_breakfast_calories():
     today = get_today_date()
-    start_of_today = datetime.strptime(today, '%Y-%m-%d')
     meal_type = request.args.get('mealType', 'breakfast') 
     
     try:
@@ -190,7 +189,7 @@ def get_total_breakfast_calories():
         
         # Sum the calories for the logged breakfast meals for today
         pipeline = [
-            {"$match": {"user_id": user_id, "meal_type": meal_type, "date": {"$gte": start_of_today}}},
+            {"$match": {"user_id": user_id, "meal_type": meal_type, "date": today}},
             {"$group": {
                 "_id": None,
                 "totalBreakfastCalories": {"$sum": "$calories"},
